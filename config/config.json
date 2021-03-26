@@ -1,0 +1,4 @@
+{
+    "mongooURI":"mongodb+srv://busticketingsystem:busticketingsystem@busticketingsystem.t8jbi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "jwtSecret":"mysecrettoken"
+}
