@@ -31,6 +31,24 @@ router.get('/bus', async(req, res)=>{
             res.status(404).json(err)
         })
 })
+//get the data of particular bus
 
+router.get('/bus/busId', async(req, res, next) => {
+    try{
+        const busNo = req.body.busNo;
+        const buses = await  Bus.findBusBySpecificFields(busNo);
+        if(!buses)
+            throw new Error('Some db error');
+        res.status(200).json({
+            message: 'Buses fetched successfully',
+            success: true,
+            buses: buses
+        })
+    }
+    catch(error){
+        error.setStatus = 500;
+        next(error);
+    }
+});
 
 module.exports = router

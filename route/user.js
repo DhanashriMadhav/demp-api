@@ -66,7 +66,7 @@ router.get('/user', async(req, res)=>{
         }).catch((err)=>{
             res.status(404).json(err)
         })
-        })
+        });
 
 
 

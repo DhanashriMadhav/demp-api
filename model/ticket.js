@@ -1,13 +1,9 @@
 const mongoose = require('mongoose')
 const User = require('../model/user.js')
 const uniqueValidator = require('mongoose-unique-validator');
-const TicketSchema = mongoose.Schema({
+const Bus = require('../model/Bus.js')
+const TicketSchema = new mongoose.Schema({
 
-    ticketId:{
-        type:Number,
-        required:true,
-        unique:true
-    },
     seatNo: { 
         type: Number, 
         max:40,

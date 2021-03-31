@@ -24,7 +24,7 @@ function userValidation(user) {
     gender:Joi.string().required(true),
     age:Joi.string().optional(),
     phoneNo:Joi.number().min(10),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net','org'] } }),
     password:Joi.string().required(true),
 
     })

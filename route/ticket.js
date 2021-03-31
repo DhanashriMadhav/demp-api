@@ -1,30 +1,67 @@
 const express = require('express')
 const Ticket = require('../model/ticket.js')
+const auth = require('../middleware/auth.js')
 const User = require('../model/user.js')
-
-
+const {check,validationResult}=require("express-validator/check")
+const ticketUtils = require('../database/ticket.js')
 const router = express.Router()
-// //create ticket
-var total_booked_seats=[ ]
-router.post('/ticket',async(req,res) => {
-    const ticket = new Ticket(req.body)
-    if(total_booked_seats.includes(req.body.bus_number)){
-        res.send("seat already booked")
-    }else{
-            var newticket = await ticket.save()
-            var seat_number=(req.body.seatNo)
-            total_booked_seats.push(seat_number)
-            console.log(total_booked_seats)
-    } 
-    console.log(newticket," debuggggg")
-    if(newticket){
-        return res.send({'Sucess':"1"});
-    }else{
-        console.log(err)
-        return res.send({"error":"something went wrong"})
-        // console.log("something went wrong")
-    }
-}),
+
+router.post('/book',[auth,[
+
+    check('isBooked','status is required')
+    .not()
+    .isEmpty(),
+    check('seatNo','seat no is requires')
+    .exists()
+    .not()
+    .isEmpty()
+
+    ]
+],async(req,res)=>{
+        const errors =validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({errors: errors});
+        }
+
+        const {
+        
+            seatNo,
+            isBooked,
+            bus
+        } = req.body;
+
+        ticketFields = {};
+        ticketFields.user = req.user.id;
+        if(seatNo)ticketFields.seatNo = seatNo;
+        if(isBooked)ticketFields.isBooked = isBooked;
+        if(bus)ticketFields.bus = bus;
+
+        try{
+            const seatno = await Ticket.findOne({seatNo})
+            if(seatno){
+                res.status(404).json({msg:'already booked'})
+            }
+         // create
+         const ticket = new Ticket(ticketFields);
+         
+         const createdTickets =await ticketUtils.createMany(ticket);
+         console.log(createdTickets)
+         if(createdTickets){
+            res.status(201).json({msg: "tiket added successfully"});
+            ticket.save();
+         }else{
+             res.status(404).json({msg:"error"})
+         }
+         
+
+     }catch(err){
+         console.error(err);
+         res.status(500).send('server error')
+
+     }
+ }
+ );
+
 
 
 
@@ -93,6 +130,6 @@ router.get('/detail/:busnumber/:ticketnumber',async(req,res)=>{
     catch(err){
         res.status(404).json(err)        
     }
-}),
+});
 
 module.exports = router
