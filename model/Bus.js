@@ -16,15 +16,25 @@ const BusSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    startCity:{
+        type:String,
+        required:true
+    },
     description:{
         type:String,
         required:true
     },
+    endCity:{
+        type:String,
+        required:true
+    },
     arrivalDate: {
-        type:Date
+        type:Date,
+        default:Date.now()
     },
     departureDate:{
-        type:Date
+        type:Date,
+        default:Date.now()
     },
     departureTiming: {
         type:Date ,

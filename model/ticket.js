@@ -1,29 +1,28 @@
 const mongoose = require('mongoose')
-const User = require('../model/user.js')
+const User = require('./user.js')
+const Bus = require('./Bus.js')
 const uniqueValidator = require('mongoose-unique-validator');
-const Bus = require('../model/Bus.js')
 const TicketSchema = new mongoose.Schema({
 
     seatNo: { 
         type: Number, 
-        max:40,
-        required: true,
         unique:true
     },
     isBooked: { 
         type: Boolean, 
         default:false
     },
-    ticketCost:{
-        type:Number
+    costOfticket:{
+        type:Number,
+        require:true
     },
-    passenger: { 
+    user:{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref:'User',
         require:true,
     },
     bus:{
-        type: mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'Bus',
         require:true,
     }

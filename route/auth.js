@@ -6,7 +6,6 @@ const config=require("../config/config.json")
 const bycrypt=require("bcryptjs")
 const {check,validationResult}=require("express-validator/check")
 
-
 const router=express.Router();
 
 router.get('/auth',auth,async(req,res) =>{
@@ -22,9 +21,6 @@ router.get('/auth',auth,async(req,res) =>{
 })
 
 //post api/aut
-// autthenticate user & get token
-
-
 router.post('/auth',[
 
     check('email','please enter a valid email').isEmail(),
@@ -32,7 +28,7 @@ router.post('/auth',[
     ],async(req,res)=>{
      const errors =validationResult(req);
      if(!errors.isEmpty()){
-         return res.status(400).json({errors: errors.array()});
+         return res.status(400).json({errors: errors});
      }
 
     const {email,password}=req.body;
